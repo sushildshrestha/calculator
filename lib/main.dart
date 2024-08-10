@@ -31,17 +31,17 @@ class Calculator extends StatelessWidget {
     'Del',
     '%',
     '/',
-    '9',
-    '8',
     '7',
+    '8',
+    '9',
     '*',
-    '6',
-    '5',
     '4',
+    '5',
+    '6',
     '-',
-    '3',
-    '2',
     '1',
+    '2',
+    '3',
     '+',
     '0',
     '.',
@@ -60,21 +60,35 @@ class Calculator extends StatelessWidget {
               flex: 2,
               child: Container(
                   child: GridView.builder(
-                itemCount: buttonList.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4),
-                itemBuilder: (context, index) {
-                  return MyButtons(
-                    buttonText: buttonList[index],
-                    color: isOperator(buttonList[index])
-                        ? Colors.deepPurple
-                        : Colors.deepPurple[50],
-                    textColor: isOperator(buttonList[index])
-                        ? Colors.white
-                        : Colors.deepPurple,
-                  );
-                },
-              )))
+                      itemCount: buttonList.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4),
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return MyButtons(
+                            buttonText: buttonList[index],
+                            color: Colors.green,
+                            textColor: Colors.white,
+                          );
+                        } else if (index == 1) {
+                          return MyButtons(
+                            buttonText: buttonList[index],
+                            color: Colors.red,
+                            textColor: Colors.white,
+                          );
+                        } else {
+                          return MyButtons(
+                            buttonText: buttonList[index],
+                            color: isOperator(buttonList[index])
+                                ? Colors.deepPurple
+                                : Colors.deepPurple[50],
+                            textColor: isOperator(buttonList[index])
+                                ? Colors.white
+                                : Colors.deepPurple,
+                          );
+                        }
+                      })))
         ],
       ),
     );
