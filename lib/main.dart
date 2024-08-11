@@ -24,8 +24,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Calculator extends StatelessWidget {
+class Calculator extends StatefulWidget {
   Calculator({super.key});
+
+  @override
+  State<Calculator> createState() => _CalculatorState();
+}
+
+class _CalculatorState extends State<Calculator> {
+  var userInput = '';
+
+  var displayOutput = '';
+
   List<String> buttonList = [
     'Clear',
     'Del',
@@ -55,7 +65,30 @@ class Calculator extends StatelessWidget {
       backgroundColor: Colors.deepPurple[100],
       body: Column(
         children: <Widget>[
-          Expanded(child: Container()),
+          Expanded(
+              child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    userInput,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    displayOutput,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+          )),
           Expanded(
               flex: 2,
               child: Container(
@@ -67,18 +100,34 @@ class Calculator extends StatelessWidget {
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return MyButtons(
+                            onTap: () {
+                              setState(() {
+                                userInput = '';
+                              });
+                            },
                             buttonText: buttonList[index],
                             color: Colors.green,
                             textColor: Colors.white,
                           );
                         } else if (index == 1) {
                           return MyButtons(
+                            onTap: () {
+                              setState(() {
+                                userInput = userInput.substring(
+                                    0, userInput.length - 1);
+                              });
+                            },
                             buttonText: buttonList[index],
                             color: Colors.red,
                             textColor: Colors.white,
                           );
                         } else {
                           return MyButtons(
+                            onTap: () {
+                              setState(() {
+                                userInput += buttonList[index];
+                              });
+                            },
                             buttonText: buttonList[index],
                             color: isOperator(buttonList[index])
                                 ? Colors.deepPurple
