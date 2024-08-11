@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 import 'components/mybuttons.dart';
 
@@ -70,6 +71,7 @@ class _CalculatorState extends State<Calculator> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                //Display Input Container
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 10),
                   alignment: Alignment.centerLeft,
@@ -78,12 +80,13 @@ class _CalculatorState extends State<Calculator> {
                     style: const TextStyle(fontSize: 20),
                   ),
                 ),
+                //Display Output Container
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 10),
                   alignment: Alignment.centerRight,
                   child: Text(
                     displayOutput,
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 24),
                   ),
                 ),
               ],
@@ -98,18 +101,22 @@ class _CalculatorState extends State<Calculator> {
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4),
                       itemBuilder: (context, index) {
+                        //Clear button
                         if (index == 0) {
                           return MyButtons(
                             onTap: () {
                               setState(() {
                                 userInput = '';
+                                displayOutput = '';
                               });
                             },
                             buttonText: buttonList[index],
                             color: Colors.green,
                             textColor: Colors.white,
                           );
-                        } else if (index == 1) {
+                        }
+                        //Del button
+                        else if (index == 1) {
                           return MyButtons(
                             onTap: () {
                               setState(() {
@@ -121,7 +128,43 @@ class _CalculatorState extends State<Calculator> {
                             color: Colors.red,
                             textColor: Colors.white,
                           );
-                        } else {
+                        }
+                        //Answer button
+                        else if (index == buttonList.length - 2) {
+                          return MyButtons(
+                            onTap: () {
+                              setState(() {
+                                equalButton();
+                              });
+                            },
+                            buttonText: buttonList[index],
+                            color: isOperator(buttonList[index])
+                                ? Colors.deepPurple
+                                : Colors.deepPurple[50],
+                            textColor: isOperator(buttonList[index])
+                                ? Colors.white
+                                : Colors.deepPurple,
+                          );
+                        }
+                        //Equal button
+                        else if (index == buttonList.length - 1) {
+                          return MyButtons(
+                            onTap: () {
+                              setState(() {
+                                equalButton();
+                              });
+                            },
+                            buttonText: buttonList[index],
+                            color: isOperator(buttonList[index])
+                                ? Colors.deepPurple
+                                : Colors.deepPurple[50],
+                            textColor: isOperator(buttonList[index])
+                                ? Colors.white
+                                : Colors.deepPurple,
+                          );
+                        }
+                        //rest of the buttons
+                        else {
                           return MyButtons(
                             onTap: () {
                               setState(() {
@@ -149,5 +192,17 @@ class _CalculatorState extends State<Calculator> {
     } else {
       return false;
     }
+  }
+
+  equalButton() {
+    String Operation = userInput;
+    Operation = Operation.replaceAll('x', '*');
+
+    Parser parser = Parser();
+    Expression expression = parser.parse(Operation);
+    ContextModel contextModel = ContextModel();
+    double evaluate = expression.evaluate(EvaluationType.REAL, contextModel);
+
+    displayOutput = evaluate.toString();
   }
 }
